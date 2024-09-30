@@ -23,6 +23,26 @@ class ImagePreviewWithWebhook:
         service = build('drive', 'v3', developerKey=API_KEY)
         return service
 
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "images": ("IMAGE", {"tooltip": "The images to save and send to webhook."}),
+                "filename_prefix": ("STRING", {"default": "ComfyUI", "tooltip": "The prefix for the file to save."}),
+                "webhook_url": ("STRING", {"default": "https://your-n8n-webhook-url.com", "tooltip": "The n8n webhook URL to send the image information to."})
+            },
+            "hidden": {
+                "prompt": "PROMPT",
+                "extra_pnginfo": "EXTRA_PNGINFO"
+            },
+        }
+
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("image_url",)
+    FUNCTION = "process_and_send_image"
+    OUTPUT_NODE = True
+    CATEGORY = "image"
+
     def upload_to_google_drive(self, image_path):
         """Upload ảnh lên Google Drive và trả về URL công khai."""
         file_metadata = {'name': os.path.basename(image_path)}
@@ -99,7 +119,6 @@ class ImagePreviewWithWebhook:
 
         return (public_image_url, {"ui": {"images": results}})
 
-
 # A dictionary that contains all nodes you want to export with their names
 NODE_CLASS_MAPPINGS = {
     "ImagePreviewWithWebhook": ImagePreviewWithWebhook
@@ -109,4 +128,3 @@ NODE_CLASS_MAPPINGS = {
 NODE_DISPLAY_NAME_MAPPINGS = {
     "ImagePreviewWithWebhook": "Image Preview with Webhook"
 }
-    
