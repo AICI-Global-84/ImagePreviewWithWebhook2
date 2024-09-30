@@ -20,11 +20,13 @@ class ImagePreviewWithWebhook:
 
     def authenticate_google_drive(self):
         """Authenticate and create a Google Drive API service."""
-        SCOPES = ['https://www.googleapis.com/auth/drive.file']
+        SCOPES = ['https://www.googleapis.com/auth/drive']
+        # Đường dẫn đến file credentials của bạn
+        credentials_path = '/content/drive/My Drive/SD-Data/client_secret_614789479937-deifkq98b4kaqco27f5luip01g8tqgb8.apps.googleusercontent.com.json'  # Thay đổi đường dẫn này cho đúng
         credentials = service_account.Credentials.from_service_account_file(
             credentials_path, scopes=SCOPES)  # Sử dụng đường dẫn từ Google Drive
-        service = build('drive', 'v3', credentials=credentials)
-        return service
+        return build('drive', 'v3', credentials=credentials)
+
 
 
     @classmethod
