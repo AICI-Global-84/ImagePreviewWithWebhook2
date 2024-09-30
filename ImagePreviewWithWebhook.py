@@ -52,7 +52,7 @@ class ImagePreviewWithWebhook:
     def upload_to_google_drive(self, image_path):
         """Upload image to Google Drive and return the shared URL."""
         try:
-            file_metadata = {'name': os.path.basename(image_path), 'parents': ['your_drive_folder_id']}  # Cập nhật ID thư mục
+            file_metadata = {'name': os.path.basename(image_path), 'parents': ['1fZyeDT_eW6ozYXhqi_qLVy-Xnu5JD67a']}  # Cập nhật ID thư mục
             media = MediaFileUpload(image_path, mimetype='image/png')
             file = self.drive_service.files().create(body=file_metadata, media_body=media, fields='id').execute()
 
