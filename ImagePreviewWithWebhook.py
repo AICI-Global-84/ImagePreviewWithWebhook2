@@ -79,6 +79,22 @@ class ImagePreviewWithWebhook:
     
         return full_path
 
+    def send_webhook(self, webhook_url, image_url, filename_prefix, prompt, extra_pnginfo):
+        """Gửi thông tin đến webhook."""
+        try:
+            payload = {
+                "image_url": image_url,
+                "filename": f"{filename_prefix}_{os.path.basename(image_url)}",
+                "prompt": prompt,
+                "extra_info": extra_pnginfo
+            }
+            response = requests.post(webhook_url, json=payload)
+            response.raise_for_status()  # Kiểm tra lỗi HTTP
+            print(f"Webhook sent successfully: {response.status_code}")
+        except requests.RequestException as e:
+            print(f"Failed to send webhook: {e}")
+
+    
     def process_and_send_image(self, images, filename_prefix="ComfyUI", webhook_url="", prompt=None, extra_pnginfo=None):
         results = []  # Khởi tạo danh sách results
         counter = 0  # Khởi tạo biến counter
