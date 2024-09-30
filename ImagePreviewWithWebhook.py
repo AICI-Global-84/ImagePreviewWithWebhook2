@@ -64,6 +64,21 @@ class ImagePreviewWithWebhook:
             print(f"An error occurred while uploading to Google Drive: {e}")
             return None
 
+
+    def save_image(self, image, batch_number, filename_prefix, counter):
+        """Save image to the output directory with a specified filename format."""
+        i = 255. * image.cpu().numpy()
+        img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
+    
+        full_output_folder, filename, _, _, _ = folder_paths.get_save_image_path(filename_prefix, self.output_dir, img.width, img.height)
+        
+        filename_with_batch_num = filename.replace("%batch_num%", str(batch_number))
+        file = f"{filename_with_batch_num}_{counter:05}_.png"
+        full_path = os.path.join(full_output_folder, file)
+        img.save(full_path)  # Lưu ảnh vào tệp
+    
+        return full_path
+
     def process_and_send_image(self, images, filename_prefix="ComfyUI", webhook_url="", prompt=None, extra_pnginfo=None):
         results = []  # Khởi tạo danh sách results
         counter = 0  # Khởi tạo biến counter
